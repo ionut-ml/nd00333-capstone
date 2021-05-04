@@ -14,7 +14,7 @@ from azureml.data.dataset_factory import TabularDatasetFactory
 # Data is located at:
 # "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data"
 
-ds = TabularDatasetFactory.from_delimited_files("./heart.csv")
+ds = TabularDatasetFactory.from_delimited_files("https://raw.githubusercontent.com/ionut-ml/nd00333-capstone/main/starter_file/heart.csv")
 
 def clean_data(data):
     
