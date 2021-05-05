@@ -7,7 +7,7 @@ import pickle
 
 def init():
     global model
-    model_path = os.path.join(os.getnev('AZUREML_MODEL_DIR'), 'model.joblib')
+    model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'model.joblib')
     # Check if model is in location
     print("Found model: ", os.path.isfile(model_path))
     model = joblib.load(model_path)
