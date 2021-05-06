@@ -5,7 +5,6 @@ The goal of this project is to productionalize a prediction model for the [Heart
 ## Dataset
 
 ### Overview
-*TODO*: Explain about the data you are using and where you got it from.
 The dataset source if the [Heart Disease dataset from UCI Machine Learning repository](https://archive.ics.uci.edu/ml/datasets/heart+disease). It contains 76 attributes, but all published experiments refer to using a subset of 14 of them. In particular, the Cleveland database is the only one that has been used by ML researchers to
 this date.
 
