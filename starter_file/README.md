@@ -1,13 +1,6 @@
-*NOTE:* This file is a template that you can use to create the README for your project. The *TODO* comments below will highlight the information you should be sure to include.
-
 # Udacity ML Engineer with Azure Capstone: Heart Disease Prediction (UCI)
 
-*TODO:* Write a short introduction to your project.
-
 The goal of this project is to productionalize a prediction model for the [Heart Disease dataset from UCI Machine Learning repository](https://archive.ics.uci.edu/ml/datasets/heart+disease). To echieve this, we use two approaches: Azure AutoML to find the best model, and a pre-selected model optimized using Azure Hyperdrive. Then we deploy the model with the best performance.
-
-## Project Set Up and Installation
-*OPTIONAL:* If your project has any special installation steps, this is where you should put it. To turn this project into a professional portfolio project, you are encouraged to explain how to set up this project in AzureML.
 
 ## Dataset
 
@@ -17,8 +10,6 @@ The dataset source if the [Heart Disease dataset from UCI Machine Learning repos
 this date.
 
 ### Task
-*TODO*: Explain the task you are going to be solving with this dataset and the features you will be using for it.
-
 The task for this dataset is classification of whether patients have heart disease or not, based on various medical information. To this end we used Accuracy as the primary metric for both approaches.
 
 Following the documentation from UCI: The "goal" field refers to the presence of heart disease in the patient. It is integer valued from 0 (no presence) to 4. Experiments with the Cleveland database have concentrated on simply attempting to distinguish presence (values 1,2,3,4) from absence (value 0).
@@ -53,13 +44,9 @@ The 14 used features as follows (with numbers from the original 76 features):
     - Value 1: > 50% diameter narrowing
 
 ### Access
-*TODO*: Explain how you are accessing the data in your workspace.
-
 We will be using the Cleaveland database, with a label of either 0 or 1 (absence or presence). It has been uploaded to this github repo, and accessed in the Jupyter Notebooks via a raw link to the .csv file.
 
 ## Automated ML
-*TODO*: Give an overview of the `automl` settings and configuration you used for this experiment
-
 In our AutoML run, we first created a workspace and a compute cluster. Afterwards, we checked if the dataset already exists in the workspace registered datasets, and if not we uploaded it from the github raw link to the .csv file. Once uploaded, we converted the dataset to a pandas DataFrame, split it into train & test sets and then converted back to a Tabular Dataset. 
 
 Once our data was ready, we configured the AutoML settings by enabling early stopping (to terminate the run if the performance is not improving), the maximum time per iteration to be 5 minutes (before each iteration terminates), and the maximum concurrent iterations to be 5 (so one per compute cluster node), and finally the maximum cores per iterations was set to use all available cores (with a value f "-1").
@@ -67,8 +54,6 @@ Once our data was ready, we configured the AutoML settings by enabling early sto
 The AutoML configuration was set to use the compute cluster we created earlier, maximum minutes that all the iterations combined can take before the expriment termiantes was set to 30. Also, the task was "classification" and the primary metric was selected to be "Accuracy" and the training dataset from above to be used to build the models. Furthermore, we used 5 cross validations, automatic featurization, and enabled Onnx compatible models, as well as outputting the logs to a specified file.
 
 ### Results
-*TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
-
 AutoML found the best performing model to be a VotingEnsemble with a 86.7% accuracy. The below hyperparameters were found using the `get_tags()` method:
 ```
 {'_aml_system_azureml.automlComponent': 'AutoML',
@@ -110,8 +95,6 @@ Further details (like Accuracy, Explanation of metrics, etc.) of the best model 
 ![Alt text](./Screenshots/automl_best-model_details2.jpg)
 
 ## Hyperparameter Tuning
-*TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
-
 In our Hyperdrive optimized run, we also used an ensemble algorithm because of their increased performance on classification tasks, specifically. scikit-learn's RandomForestClassifier. This meta estimator fits a number of decision tree classifiers to sub-samples of the training data. In order to improve accuracy and also control-overfitting, it uses averages of the performances of the fitted decision trees.
 
 We used Azure HyperDrive for Hyperpamater Tunning of this algorithm on the following parameters:
@@ -121,8 +104,6 @@ We used Azure HyperDrive for Hyperpamater Tunning of this algorithm on the follo
 
 
 ### Results
-*TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
-
 HyperDrive optimized the model to an Accuracy of 87%, which is higher than the VotingEnsemble found by AutoML, with the below hyperparmaters found with the `get_metrics` method of the best run:
 
 ```
@@ -141,8 +122,6 @@ The following screenshot shows the tuned hyperparameters and the run Id of the o
 
 
 ## Model Deployment
-*TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
-
 Since the HyperDrie optimized RandomForestClassifier had the best Accuracy (87%), we deployed this model. Documentation followed for steps: [Deploy machine learning models to Azure](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python) 
 
 First, we saved and registered the best model. Then, we created an Environment with conda dependencies and needed python modules (we also ensured we have an .yml file with all the modules needed in the current working directory).
@@ -163,11 +142,6 @@ The following screenshot shows the response to our query to the endpoint:
 
 
 ## Screen Recording
-*TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
-- A working model
-- Demo of the deployed  model
-- Demo of a sample request sent to the endpoint and its response
-
 The following link is for a screencast showcasing the working model, a demo of the deployed model and a demo of the sample request sent to the endpoint and its reponse: [Youtube - Udacity ML Engineer with Azure Capstone](https://www.youtube.com/watch?v=7xlvjv-oX4M)
 
 ## Citations
