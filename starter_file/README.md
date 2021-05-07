@@ -88,10 +88,20 @@ A screenshot of the best model run Id and other details:
 The best model hyperparameters can be seen in the following screenshot:
 ![Alt text](./Screenshots/automl_best-model_hyperparams.jpg)
 
-Further details (like Accuracy, Explanation of metrics, etc.) of the best model from ML Studio in the below screenshots:
+In the below screenshot, the best model can also be seen in ML Studio, on the right-hand side unde the Best model summary (in our case, a VotingEnsemble algorithm):
 ![Alt text](./Screenshots/automl_mlstudio.jpg)
+
+In the next screenshot we see the next page if we click on the best model algorithm name (above). Here, we see details about the best model and its run:
 ![Alt text](./Screenshots/automl_best-model_details1.jpg)
+
+In the following screenshot we have further details on metrics, accessed by click on the Metrics tab (above). We can see charts for Precision-Recall, ROC, as well as key metrics like Accuracy, AUC weighted:
 ![Alt text](./Screenshots/automl_best-model_details2.jpg)
+
+Finally, in the Jupyter Notebook we have registered the best AutoML model. This can be seen in the below screenshot:
+![Alt text](./Screenshots/automl_best-model_registered.jpg)
+
+Once registering was completed successfully, we can see our registered AutoML model in the Models section of ML Studio. This can be seen in the below screenshot (along with the regitered HyperDrive model):
+![Alt text](./Screenshots/hdr_best-model_registered-models_ml-studio.jpg)
 
 ## Hyperparameter Tuning
 In our Hyperdrive optimized run, we also used an ensemble algorithm because of their increased performance on classification tasks, specifically. scikit-learn's RandomForestClassifier. This meta estimator fits a number of decision tree classifiers to sub-samples of the training data. In order to improve accuracy and also control-overfitting, it uses averages of the performances of the fitted decision trees.
@@ -123,25 +133,48 @@ The following screenshot shows the tuned hyperparameters and the run Id of the o
 ## Model Deployment
 Since the HyperDrie optimized RandomForestClassifier had the best Accuracy (87%), we deployed this model. Documentation followed for steps: [Deploy machine learning models to Azure](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python) 
 
-First, we saved and registered the best model. Then, we created an Environment with conda dependencies and needed python modules (we also ensured we have an .yml file with all the modules needed in the current working directory).
+First, we saved and registered the best model, which can be seen in the following screenshot of the notebook:
+![Alt text](./Screenshots/hdr_best-model_save_register.jpg)
 
-For the deployment, we set-up an Inference Configuration that used the above Environment, and an `score.py` entry script that allows us to load the model and make a prediction with it. Also, we used ACI Webservice and its `deploy_configuration` to enable app insights, auathentication and hardware specs.
+As a result, the registered model can be seen in the Models section of ML Studio (along with the registered AutoML model):
+![Alt text](./Screenshots/hdr_best-model_runid_hyperparams.jpg)
 
-Lastly, we used the workspace, regitered model, inference config and deployment config to deploy the model and checked the deployment output, logs and service state.
 
-In order to query the endpoint, we used the scoring URI, the primary key and the `requests` python module to send a post request (that used the primary key as Bearer in the header) to the endpoint with some input data. The input data was created from the same train-test split, but using the first entry of the test dataset that was converted to json format (using "column-name": "value" format" of the 13 features)
+Then, we created an Environment with conda dependencies and needed python modules (we also ensured we have an .yml file with all the modules needed in the current working directory). Also, we set-up an Inference Configuration that used the above Environment, and an `score.py` entry script that allows us to load the model and make a prediction with it. This can be seen in the following screenshot:
+![Alt text](./Screenshots/hdr_best-model_deploy_env-dep_inf-config.jpg)
 
-Below we have screenshots with the depoyed model and active endpoint:
+
+The final preparation step for the deployment, we used ACI Webservice and its `deploy_configuration` to enable app insights, auathentication and hardware specs. Lastly, we used the workspace, regitered model, inference config and deployment config to do the actual model deployment. We can see the code for this in the below screenshot, along with the output from its `wait_for_deployment` method:
+![Alt text](./Screenshots/hdr_best-model_deploy_deploy-config_deploy_wait-for-deploy-output.jpg)
+
+Afterwards, we checked the deployment output, logs and service state to see if the deployment was successful and other info needed for calling the endpoint. This is captured in the below screenshot:
+![Alt text](./Screenshots/hdr_best-model_deploy_aciwebservice-logs_state_scoring-uri_swagger-uri.jpg)
+
+Once the deployment was successful, we can see the details of the active endpoint in the Endpoints section of ML Studio:
 ![Alt text](./Screenshots/hdr_deployed_active1.jpg)
-![Alt text](./Screenshots/hdr_deployed_active1.jpg)
 
-The following screenshot shows the response to our query to the endpoint:
-![Alt text](./Screenshots/hdr_deployed_response.jpg)
+In the next screenshot, we can see the same page in ML Studio, but with the scorring URI and App Insights URL of the endpoint:
+![Alt text](./Screenshots/hdr_deployed_active2.jpg)
 
+Again, the following screenshot shows important info needed for calling the endpoint: scoring uri, swagger uri, primary key (and the endpoint state):
+![Alt text](./Screenshots/hdr_best-model_deploy_state_scoring-uri_swagger-uri_primary-key.jpg)
+
+Following the [Azure documentation](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-consume-web-service?tabs=python#call-the-service-python), the input data for calling the endpoint was created from the same train-test split, but using the first 2 entries of the test dataset. We read the test dataset and the test labels in `pandas DataFrames`, see below screenshot:
+![Alt text](./Screenshots/hdr_best-model_deploy_input_df_x-test_label.jpg)
+
+Next, the input data was converted to json format (using "column-name": "value" format" of the 13 features) similar to the above documentation guidelines. Please see below screenshot for this as well as the setp-up for the call (to be explained below):
+![Alt text](./Screenshots/hdr_best-model_deploy_input_json_x-test_requests_header_response-post.jpg)
+
+In order to query the endpoint, we used the scoring URI, the input data, and the Header (which we'll explain shortly) in `post` method of the `requests` python module. To compose the Header of the post we used the primary key as Bearer token in the 'Authentication' section, along with other standard input (like the fact that we are sending a json, converted from a `dict`). The code for the set-up of the endpoint call as awell as its response can be seen in the following screenshot:
+![Alt text](./Screenshots/hdr_best-model_deploy_input_json_x-test_requests_header_response-post_response-result.jpg)
 
 
 ## Screen Recording
 The following link is for a screencast showcasing the working model, a demo of the deployed model and a demo of the sample request sent to the endpoint and its reponse: [Youtube - Udacity ML Engineer with Azure Capstone](https://www.youtube.com/watch?v=7xlvjv-oX4M)
+
+## Future Improvement Suggestions
+For improving the workflow of the project, a more unified approach could be implemented. This means merging both experiment runs (AutoML & HyperDrive) in the same Jupyter Notebook, as this would streamline the workflow. Furtheremore, the preparations like compute clusters, workspace, experiments would only be done or checked once. Also, the data could be read-in, registered, train-test split, prepared as pandas DataFrames, TabularDatasets or jsons (for API calls) only once. We would also have one place to go for comparisons. To build on this, once training is done and the best models and hyperparmaters are found and registered, we could have a procedure to compare performances of the two approaches and deploy the best model of the two, and then do the endpoint call to it using the already split data. Lastly, one more improvement that can be done is to include all these steps in a Pipeline and deploy it as well. This would automate the whole process, following the CI/CD principles of the ML Ops as discussed in the lectures of the course.
+
 
 ## Citations
 The names of the principal investigator responsible for the data collection at each institution:
