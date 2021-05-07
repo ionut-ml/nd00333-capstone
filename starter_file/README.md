@@ -127,13 +127,13 @@ The following screenshot shows the tuned hyperparameters and the run Id of the o
 
 
 ## Model Deployment
-Since the HyperDrie optimized RandomForestClassifier had the best Accuracy (87%), we deployed this model. Documentation followed for steps: [Deploy machine learning models to Azure](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python) 
+Since the HyperDrive optimized RandomForestClassifier had the best Accuracy (87%), we deployed this model. Documentation followed for steps: [Deploy machine learning models to Azure](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-deploy-and-where?tabs=python) 
 
 First, we saved and registered the best model, which can be seen in the following screenshot of the notebook:
 ![Alt text](./Screenshots/hdr_best-model_save_register.jpg)
 
 As a result, the registered model can be seen in the Models section of ML Studio (along with the registered AutoML model):
-![Alt text](./Screenshots/hdr_best-model_runid_hyperparams.jpg)
+![Alt text](./Screenshots/hdr_best-model_registered-models_ml-studio.jpg)
 
 
 Then, we created an Environment with conda dependencies and needed python modules (we also ensured we have an .yml file with all the modules needed in the current working directory). Also, we set-up an Inference Configuration that used the above Environment, and an `score.py` entry script that allows us to load the model and make a prediction with it. This can be seen in the following screenshot:
