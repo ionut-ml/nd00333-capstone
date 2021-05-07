@@ -71,8 +71,6 @@ AutoML found the best performing model to be a VotingEnsemble with a 86.7% accur
 
 To improve the performance of the AutoML run and its best model, we could increase the iteration timeout in minutes and the experiment timeout in minutes to approx. 1 or 1.5 hours in order to allow more time for the models to train. We could also use a better primary metric for a slightly imbalaned dataset, like AUC Weighted.
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
-
 Here we have a screenshot with the run submition output:
 ![Alt text](./Screenshots/automl_submit_output_models.jpg)
 
