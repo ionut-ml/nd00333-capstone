@@ -119,8 +119,6 @@ HyperDrive optimized the model to an Accuracy of 87%, which is higher than the V
 
 Since the hyperparameters are quite close to the default ones, in order to improve the performance the parameter space could be increased. Specifically, the number of trees would range from 50 to 250 (at least). Also, AutoML greatly benefits from its Featurization step, and this is something that would help here: adding a Feature Engineering step in the `train.py` script. Lastly, using a better primary metric like AUC Weighted would also be beneficial and, if we allow for more training time, a Grid Search parameter sampling would help with slight impromenets since it's an exhaustive search of the parameter space.
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
-
 Below we can see a screenshot of `RunDetails` widget:
 ![Alt text](./Screenshots/hdr_rundetails.jpg)
 
